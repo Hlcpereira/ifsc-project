@@ -41,5 +41,16 @@ namespace Pmb.PharmacyControl.Api.Controllers.V1
         {
             return Ok(await repository.FindAsNoTrackingAsync(x => x.Name == name));
         }
+
+        [HttpPut("control")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Control(
+            [FromBody] ControlMedicineCommand command,
+            [FromServices] IMedicineService service
+        )
+        {
+            await service.ControlMedicine(command);
+            return Ok();
+        }
     }
 }

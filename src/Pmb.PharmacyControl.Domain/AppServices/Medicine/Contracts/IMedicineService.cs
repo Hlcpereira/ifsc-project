@@ -14,5 +14,6 @@ namespace Pmb.PharmacyControl.Domain.AppServices.Medicine.Contracts
     public interface IMedicineService
     {
         public Task<MedicineVm> Create(CreateMedicineCommand command);
+        public Task ControlMedicine(ControlMedicineCommand command);
     }
 }
