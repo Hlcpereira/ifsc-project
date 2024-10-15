@@ -6,11 +6,13 @@
 
 using System;
 using System.Net;
+using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 using Pmb.PharmacyControl.Domain.AppServices.Medicine.Commands;
 using Pmb.PharmacyControl.Domain.AppServices.Medicine.Contracts;
+using Pmb.PharmacyControl.Domain.Contracts.Repositories;
 using Pmb.PharmacyControl.Domain.ViewModels;
 
 namespace Pmb.PharmacyControl.Api.Controllers.V1
@@ -21,12 +23,23 @@ namespace Pmb.PharmacyControl.Api.Controllers.V1
     public class MedicineController : ControllerBase
     {
         [HttpPost]
-        public async Task Create(
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Create(
             [FromBody] CreateMedicineCommand command,
             [FromServices] IMedicineService service
         )
         {
-            await service.Create(command);
+            return Ok(await service.Create(command));
+        }
+
+        [HttpGet("{name}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Get(
+            [FromRoute] string name,
+            [FromServices] IMedicineRepository repository
+        )
+        {
+            return Ok(await repository.FindAsNoTrackingAsync(x => x.Name == name));
         }
     }
 }
