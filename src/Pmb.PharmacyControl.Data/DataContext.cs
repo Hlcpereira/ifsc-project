@@ -5,6 +5,9 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+
+using Pmb.PharmacyControl.Data.Map;
 using Pmb.PharmacyControl.Domain.Contracts.DataContext;
 
 namespace Pmb.PharmacyControl.Data
@@ -23,6 +26,8 @@ namespace Pmb.PharmacyControl.Data
         protected override void OnModelCreating(ModelBuilder mb)
         {
             mb.HasDefaultSchema(Schema);
+
+            mb.ApplyConfigurationsFromAssembly(typeof(MedicineMap).GetTypeInfo().Assembly);
         }
         
         

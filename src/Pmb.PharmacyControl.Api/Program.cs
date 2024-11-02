@@ -59,6 +59,7 @@ app.UseSwaggerUI(c =>
 );
 
 app.UseAuthorization();
+app.AppEnsureMigrations(enviroment);
 
 app.MapControllers();
 
