@@ -21,7 +21,7 @@ namespace Pmb.PharmacyControl.Data.Map
             builder.ToTable(TABLE_NAME);
             builder.MapId(x => x.Id);
             builder.MapEnumAsShort(x => x.ControlLevel, "control_level", true);
-            builder.MapVarchar(x => x.Name, "integration_url", false);
+            builder.MapVarchar(x => x.Name, "name", false);
         }        
     }
 }
