@@ -16,6 +16,8 @@ using Pmb.PharmacyControl.Data;
 using Pmb.PharmacyControl.Data.Repositories;
 using Pmb.PharmacyControl.Domain.AppServices.Medicine.Contracts;
 using Pmb.PharmacyControl.Domain.AppServices.Medicine;
+using Pmb.PharmacyControl.Domain.AppServices.Pharmaceutical.Contracts;
+using Pmb.PharmacyControl.Domain.AppServices.Pharmaceutical;
 using Pmb.PharmacyControl.Domain.Contracts.Persistance;
 using Pmb.PharmacyControl.Domain.Contracts.Repositories;
 
@@ -30,6 +32,8 @@ var enviroment = builder.Environment;
 // Start of DI
 services.AddScoped<IMedicineService, MedicineService>();
 services.AddScoped<IMedicineRepository, MedicineRepository>();
+services.AddScoped<IPharmaceuticalService, PharmaceuticalService>();
+services.AddScoped<IPharmaceuticalRepository, PharmaceuticalRepository>();
 services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 services.AddControllers();
