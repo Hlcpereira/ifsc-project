@@ -14,6 +14,8 @@ using Microsoft.OpenApi.Models;
 using Pmb.PharmacyControl.Api.Config;
 using Pmb.PharmacyControl.Data;
 using Pmb.PharmacyControl.Data.Repositories;
+using Pmb.PharmacyControl.Domain.AppServices.HealthUnit.Contracts;
+using Pmb.PharmacyControl.Domain.AppServices.HealthUnit;
 using Pmb.PharmacyControl.Domain.AppServices.Medicine.Contracts;
 using Pmb.PharmacyControl.Domain.AppServices.Medicine;
 using Pmb.PharmacyControl.Domain.AppServices.Pharmaceutical.Contracts;
@@ -30,6 +32,8 @@ var configuration = builder.Configuration;
 var enviroment = builder.Environment;
 
 // Start of DI
+services.AddScoped<IHealthUnitService, HealthUnitService>();
+services.AddScoped<IHealthUnitRepository, HealthUnitRepository>();
 services.AddScoped<IMedicineService, MedicineService>();
 services.AddScoped<IMedicineRepository, MedicineRepository>();
 services.AddScoped<IPharmaceuticalService, PharmaceuticalService>();
