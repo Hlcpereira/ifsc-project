@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Pmb.PharmacyControl.Data;
@@ -11,9 +12,10 @@ using Pmb.PharmacyControl.Data;
 namespace Pmb.PharmacyControl.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241202183213_HealthUnitMigration")]
+    partial class HealthUnitMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,31 +57,6 @@ namespace Pmb.PharmacyControl.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("medicine", "public");
-                });
-
-            modelBuilder.Entity("Pmb.PharmacyControl.Domain.Entities.MedicineStock", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("HealthUnitId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("MedicineId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int")
-                        .HasColumnName("quantity");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HealthUnitId");
-
-                    b.HasIndex("MedicineId");
-
-                    b.ToTable("medicine_stock", "public");
                 });
 
             modelBuilder.Entity("Pmb.PharmacyControl.Domain.Entities.Pharmaceutical", b =>
@@ -145,25 +122,6 @@ namespace Pmb.PharmacyControl.Data.Migrations
 
                     b.Navigation("Address")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Pmb.PharmacyControl.Domain.Entities.MedicineStock", b =>
-                {
-                    b.HasOne("Pmb.PharmacyControl.Domain.Entities.HealthUnit", "HealthUnit")
-                        .WithMany()
-                        .HasForeignKey("HealthUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Pmb.PharmacyControl.Domain.Entities.Medicine", "Medicine")
-                        .WithMany()
-                        .HasForeignKey("MedicineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("HealthUnit");
-
-                    b.Navigation("Medicine");
                 });
 #pragma warning restore 612, 618
         }
