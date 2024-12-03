@@ -14,6 +14,7 @@ using Pmb.PharmacyControl.Domain.Contracts.Persistance;
 using Pmb.PharmacyControl.Domain.Contracts.Repositories;
 using Pmb.PharmacyControl.Domain.Projections;
 using Pmb.PharmacyControl.Domain.ViewModels;
+using Pmb.PharmacyControl.Domain.ValueObjects;
 
 namespace Pmb.PharmacyControl.Domain.AppServices.HealthUnit
 {
@@ -34,7 +35,15 @@ namespace Pmb.PharmacyControl.Domain.AppServices.HealthUnit
             var HealthUnit = new HealthUnitEntity()
             {
                 Id = Guid.NewGuid(),
-                Name = command.Name
+                Name = command.Name,
+                Address = new Address()
+                {
+                    Street = command.Address.Street,
+                    Number = command.Address.Number,
+                    Complement = command.Address.Complement,
+                    Neighborhood = command.Address.Neighborhood,
+                    ZipCode = command.Address.ZipCode
+                }
             };
 
             await _repository.AddAsync(HealthUnit);
