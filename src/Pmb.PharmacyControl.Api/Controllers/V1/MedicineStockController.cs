@@ -4,15 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Net;
-using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
+using Pmb.PharmacyControl.Domain.Specs;
+using Pmb.PharmacyControl.Domain.Extensions;
 using Pmb.PharmacyControl.Domain.AppServices.MedicineStock.Commands;
 using Pmb.PharmacyControl.Domain.AppServices.MedicineStock.Contracts;
 using Pmb.PharmacyControl.Domain.Contracts.Repositories;
+using Pmb.PharmacyControl.Domain.Projections;
 
 namespace Pmb.PharmacyControl.Api.Controllers.V1
 {
@@ -38,7 +42,14 @@ namespace Pmb.PharmacyControl.Api.Controllers.V1
             [FromServices] IMedicineStockRepository repository
         )
         {
-            return Ok(await repository.FindAsNoTrackingAsync(x => x.Medicine.Name == name));
+            var filterSpec = new MedicineStockSpec()
+                .ByMedicineName(name)
+                .Include(x => x
+                    .Include(x => x.Medicine)
+                );
+
+            var medicineStock = await repository.FindAsNoTrackingAsync(filterSpec);
+            return Ok(medicineStock.ToVm());
         }
 
         [HttpPut("update")]
