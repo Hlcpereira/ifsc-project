@@ -16,6 +16,7 @@ using Pmb.PharmacyControl.Domain.Extensions;
 using Pmb.PharmacyControl.Domain.AppServices.MedicineStock.Commands;
 using Pmb.PharmacyControl.Domain.AppServices.MedicineStock.Contracts;
 using Pmb.PharmacyControl.Domain.Contracts.Repositories;
+using Pmb.PharmacyControl.Domain.Filters;
 using Pmb.PharmacyControl.Domain.Projections;
 
 namespace Pmb.PharmacyControl.Api.Controllers.V1
@@ -35,21 +36,23 @@ namespace Pmb.PharmacyControl.Api.Controllers.V1
             return Ok(await service.Create(command));
         }
 
-        [HttpGet("{name}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Get(
-            [FromRoute] string name,
+            [FromQuery] MedicineStockFilter filter,
             [FromServices] IMedicineStockRepository repository
         )
         {
             var filterSpec = new MedicineStockSpec()
-                .ByMedicineName(name)
+                .ByFilter(filter)
                 .Include(x => x
                     .Include(x => x.Medicine)
+                    .Include(x => x.HealthUnit)
                 );
 
             var medicineStock = await repository.FindAsNoTrackingAsync(filterSpec);
-            return Ok(medicineStock.ToVm());
+            var vm = medicineStock.ToVm();
+            return Ok(vm);
         }
 
         [HttpPut("update")]
