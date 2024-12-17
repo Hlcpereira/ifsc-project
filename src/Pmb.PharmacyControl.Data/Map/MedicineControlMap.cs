@@ -25,6 +25,9 @@ namespace Pmb.PharmacyControl.Data.Map
 
             builder.HasOne(x => x.Medicine);
             builder.HasOne(x => x.Pharmaceutical);
+
+            builder.HasIndex(x => x.PrescriptionUrl )
+                .IsUnique(true);
         }        
     }
 }
