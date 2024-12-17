@@ -14,7 +14,6 @@ using Pmb.PharmacyControl.Domain.Contracts.Persistance;
 using Pmb.PharmacyControl.Domain.Contracts.Repositories;
 using Pmb.PharmacyControl.Domain.Projections;
 using Pmb.PharmacyControl.Domain.ViewModels;
-using Pmb.PharmacyControl.Domain.Entities;
 
 namespace Pmb.PharmacyControl.Domain.AppServices.Medicine
 {
@@ -43,17 +42,6 @@ namespace Pmb.PharmacyControl.Domain.AppServices.Medicine
             await CommitAsync();
 
             return Medicine.ToVm();
-        }
-
-        /* WIP */
-        public Task ControlMedicine(ControlMedicineCommand command)
-        {
-            var MedicineControl = new MedicineControl()
-            {
-                Id = Guid.NewGuid()
-            };
-            
-            throw new NotImplementedException();
         }
     }
 }

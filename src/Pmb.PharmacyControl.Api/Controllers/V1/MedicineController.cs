@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using Pmb.PharmacyControl.Domain.AppServices.Medicine.Commands;
 using Pmb.PharmacyControl.Domain.AppServices.Medicine.Contracts;
+using Pmb.PharmacyControl.Domain.AppServices.MedicineControl.Commands;
+using Pmb.PharmacyControl.Domain.AppServices.MedicineControl.Contracts;
 using Pmb.PharmacyControl.Domain.Contracts.Repositories;
 using Pmb.PharmacyControl.Domain.ViewModels;
 
@@ -46,7 +48,7 @@ namespace Pmb.PharmacyControl.Api.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Control(
             [FromBody] ControlMedicineCommand command,
-            [FromServices] IMedicineService service
+            [FromServices] IMedicineControlService service
         )
         {
             await service.ControlMedicine(command);

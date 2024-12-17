@@ -6,12 +6,13 @@
 
 using System;
 
-namespace Pmb.PharmacyControl.Domain.AppServices.Medicine.Commands
+namespace Pmb.PharmacyControl.Domain.AppServices.MedicineControl.Commands
 {
     public class ControlMedicineCommand
     {
         public Guid MedicineId { get; set; }
         public Guid PharmaceuticalId { get; set; }
-        public string prescriptionUrl { get;}
+        public int Quantity { get; set; }
+        public string PrescriptionUrl { get; set; }
     }
 }
