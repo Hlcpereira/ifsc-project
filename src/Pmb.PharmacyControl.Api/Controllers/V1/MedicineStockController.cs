@@ -51,8 +51,8 @@ namespace Pmb.PharmacyControl.Api.Controllers.V1
                 );
 
             var medicineStock = await repository.FindAsNoTrackingAsync(filterSpec);
-            var vm = medicineStock.ToVm();
-            return Ok(vm);
+            //return Ok(medicineStock.ToVm());
+            return Ok(medicineStock);
         }
 
         [HttpPut("update")]

@@ -30,7 +30,8 @@ namespace Pmb.PharmacyControl.Domain.AppServices.MedicineStock
             _repository = repository;
         }
 
-        public async Task<MedicineStockVm> Create(CreateMedicineStockCommand command)
+        //public async Task<MedicineStockVm> Create(CreateMedicineStockCommand command)
+        public async Task<MedicineStockEntity> Create(CreateMedicineStockCommand command)
         {
             var MedicineStock = new MedicineStockEntity()
             {
@@ -43,10 +44,11 @@ namespace Pmb.PharmacyControl.Domain.AppServices.MedicineStock
             await _repository.AddAsync(MedicineStock);
             await CommitAsync();
 
-            return MedicineStock.ToVm();
+            return MedicineStock;
         }
 
-        public async Task<MedicineStockVm> Update(UpdateMedicineStockCommand command)
+        //public async Task<MedicineStockVm> Update(UpdateMedicineStockCommand command)
+        public async Task<MedicineStockEntity> Update(UpdateMedicineStockCommand command)
         {
             var entity = await _repository.FindAsync(x => x.Id == command.Id);
 
@@ -55,7 +57,7 @@ namespace Pmb.PharmacyControl.Domain.AppServices.MedicineStock
             _repository.Modify(entity);
             await CommitAsync();
 
-            return entity.ToVm();
+            return entity;
         }
     }
 }
