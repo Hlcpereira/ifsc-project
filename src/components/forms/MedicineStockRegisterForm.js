@@ -36,10 +36,11 @@ function MedicineStockRegisterForm() {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div>
+            <div class="form-group">
             </div>
-            <div>
+            <div class="form-group">
             </div>
+            <br/>
             <button type="submit">Submit</button>
         </form>
     );

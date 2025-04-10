@@ -35,20 +35,21 @@ function MedicineRegisterForm() {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div>
+            <div class="form-group">
                 <label>Nome:</label>
-                <input type="text" name="name" value={formData.name} onChange={handleFormDataChange} required />
+                <input type="text" class="form-control" name="name" value={formData.name} onChange={handleFormDataChange} required />
             </div>
-            <div>
+            <div class="form-group">
                 <label>
                     Nível de Controle:
-                    <select value={formData.controlLevel} name="controlLevel" onChange={handleFormDataChange}>
+                    <select class="form-control" id="exampleFormControlSelect1" value={formData.controlLevel} name="controlLevel" onChange={handleFormDataChange}>
                         <option disabled value="">Selecione</option>
                         <option value="1">Vermelho</option>
                     </select>
                 </label>
             </div>
-            <button type="submit">Submit</button>
+            <br/>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     );
 }
