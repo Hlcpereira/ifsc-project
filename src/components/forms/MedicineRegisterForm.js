@@ -14,7 +14,7 @@ function MedicineRegisterForm() {
         e.preventDefault();
 
         try {
-            const medicineApiUrl = process.env.BACKEND_APP_API_URL + "Medicine";
+            const medicineApiUrl = process.env.REACT_APP_API_URL + "Medicine";
             const response = await fetch(medicineApiUrl, {
                 method: "POST",
                 headers: {
