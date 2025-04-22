@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-using System;
-using System.Net;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 using Pmb.PharmacyControl.Domain.AppServices.Medicine.Commands;
 using Pmb.PharmacyControl.Domain.AppServices.Medicine.Contracts;
@@ -32,6 +33,17 @@ namespace Pmb.PharmacyControl.Api.Controllers.V1
         )
         {
             return Ok(await service.Create(command));
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAll(
+            [FromServices] IMedicineRepository repository
+        )
+        {
+            var medicineList = await Task.FromResult(repository.ListAsNoTracking()
+                    .ToList());
+            return Ok(medicineList);
         }
 
         [HttpGet("{name}")]
