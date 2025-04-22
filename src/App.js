@@ -28,6 +28,9 @@ function App() {
             <li class="nav-item">
               <a class="nav-link" href="/medicinestockregister">Controle de estoque</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pharmaceuticalregister">Registrar farmaceutico</a>
+            </li>
           </ul>
         </nav>
 

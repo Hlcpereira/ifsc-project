@@ -2,6 +2,7 @@ import React from 'react';
 
 import MedicineRegister from './pages/MedicineRegister';
 import MedicineStockRegister from './pages/MedicineStockRegister';
+import PharmaceuticalRegister from './pages/PharmaceuticalRegister';
 
 const routes = [
     {
@@ -13,6 +14,11 @@ const routes = [
       key: "medicinestockregister",
       route: "/medicinestockregister",
       component: <MedicineStockRegister />,
+    },
+    {
+      key: "pharmaceuticalregister",
+      route: "/pharmaceuticalregister",
+      component: <PharmaceuticalRegister />,
     },
   ];
   
