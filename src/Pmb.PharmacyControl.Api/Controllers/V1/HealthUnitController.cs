@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
@@ -29,6 +30,17 @@ namespace Pmb.PharmacyControl.Api.Controllers.V1
         )
         {
             return Ok(await service.Create(command));
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAll(
+            [FromServices] IHealthUnitRepository repository
+        )
+        {
+            var healthUnitList = await Task.FromResult(repository.ListAsNoTracking()
+                    .ToList());
+            return Ok(healthUnitList);
         }
 
         [HttpGet("{id}")]
