@@ -48,6 +48,16 @@ services.AddScoped<IPharmaceuticalService, PharmaceuticalService>();
 services.AddScoped<IPharmaceuticalRepository, PharmaceuticalRepository>();
 services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
@@ -76,6 +86,8 @@ app.UseSwaggerUI(c =>
 
 app.UseAuthorization();
 app.AppEnsureMigrations(enviroment);
+
+app.UseCors("AllowAllOrigins");
 
 app.MapControllers();
 
