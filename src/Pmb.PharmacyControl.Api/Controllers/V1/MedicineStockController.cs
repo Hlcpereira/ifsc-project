@@ -11,13 +11,13 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-using Pmb.PharmacyControl.Domain.Specs;
 using Pmb.PharmacyControl.Domain.Extensions;
 using Pmb.PharmacyControl.Domain.AppServices.MedicineStock.Commands;
 using Pmb.PharmacyControl.Domain.AppServices.MedicineStock.Contracts;
 using Pmb.PharmacyControl.Domain.Contracts.Repositories;
 using Pmb.PharmacyControl.Domain.Filters;
 using Pmb.PharmacyControl.Domain.Projections;
+using Pmb.PharmacyControl.Domain.Specs;
 
 namespace Pmb.PharmacyControl.Api.Controllers.V1
 {
