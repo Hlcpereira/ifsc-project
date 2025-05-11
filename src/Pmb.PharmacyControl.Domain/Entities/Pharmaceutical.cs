@@ -14,5 +14,6 @@ namespace Pmb.PharmacyControl.Domain.Entities
         public string Name { get; set; }
         public string RegisterNumber { get; set; }
         public Guid HealthUnitId { get; set; }
+        public HealthUnit HealthUnit { get; set; }
     }
 }

@@ -23,6 +23,8 @@ namespace Pmb.PharmacyControl.Data.Map
             builder.MapVarchar(x => x.Name, "name", false);
             builder.MapVarchar(x => x.RegisterNumber, "register_number", false);
             builder.MapUuid(x => x.HealthUnitId, "health_unit_id");
+
+            builder.HasOne(x => x.HealthUnit);
         }        
     }
 }
