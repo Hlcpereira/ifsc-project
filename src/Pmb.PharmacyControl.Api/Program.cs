@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
+using System.Text.Json.Serialization;
+
 using Pmb.PharmacyControl.Api.Config;
 using Pmb.PharmacyControl.Data;
 using Pmb.PharmacyControl.Data.Repositories;
@@ -58,7 +60,11 @@ services.AddCors(options =>
     });
 });
 
-services.AddControllers();
+services.AddControllers()
+            .AddJsonOptions(option=>
+            {
+                option.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
