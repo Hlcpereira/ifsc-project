@@ -44,7 +44,8 @@ function MedicineRegisterForm() {
                     Nível de Controle:
                     <select class="form-control" id="exampleFormControlSelect1" value={formData.controlLevel} name="controlLevel" onChange={handleFormDataChange}>
                         <option disabled value="">Selecione</option>
-                        <option value="1">Vermelho</option>
+                        <option value="RedStripe">Vermelho</option>
+                        <option value="BlackStripe">Preto</option>
                     </select>
                 </label>
             </div>

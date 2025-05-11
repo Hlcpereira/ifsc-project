@@ -96,7 +96,7 @@ function MedicineStockRegisterForm() {
                 <input type="text" class="form-control" name="quantity" value={formData.quantity} onChange={handleFormDataChange} required />
             </div>
             <br/>
-            <button type="submit">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     );
 }

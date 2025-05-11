@@ -78,7 +78,7 @@ function PharmaceuticalRegisterForm() {
                 </label>
             </div>
             <br/>
-            <button type="submit">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     );
 }
