@@ -4,15 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-using System;
-using System.Net;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 using Pmb.PharmacyControl.Domain.AppServices.Pharmaceutical.Commands;
 using Pmb.PharmacyControl.Domain.AppServices.Pharmaceutical.Contracts;
 using Pmb.PharmacyControl.Domain.Contracts.Repositories;
+using Pmb.PharmacyControl.Domain.Extensions;
+using Pmb.PharmacyControl.Domain.Filters;
+using Pmb.PharmacyControl.Domain.Specs;
 using Pmb.PharmacyControl.Domain.ViewModels;
 
 namespace Pmb.PharmacyControl.Api.Controllers.V1
@@ -40,6 +45,26 @@ namespace Pmb.PharmacyControl.Api.Controllers.V1
         )
         {
             return Ok(await repository.FindAsNoTrackingAsync(x => x.Id == id));
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAll(
+            [FromServices] IPharmaceuticalRepository repository
+        )
+        {
+
+            var filterSpec = new PharmaceuticalSpec()
+                .ByFilter(new PharmaceuticalFilter())
+                .Include(x => x
+                    .Include(x => x.HealthUnit)
+                );
+        
+            //var pharmaceutical = await repository.ListAsNoTracking(filterSpec);
+
+            var pharmaceuticalList = await Task.FromResult(repository.ListAsNoTracking(filterSpec)
+                    .ToList());
+            return Ok(pharmaceuticalList);
         }
 
         [HttpPut("{id}")]
