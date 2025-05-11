@@ -3,6 +3,8 @@ import React from 'react';
 import MedicineRegister from './pages/MedicineRegister';
 import MedicineStockRegister from './pages/MedicineStockRegister';
 import PharmaceuticalRegister from './pages/PharmaceuticalRegister';
+import PharmaceuticalUpdate from './pages/PharmaceuticalUpdate';
+import PharmaceuticalListing from './pages/PharmaceuticalListing';
 
 const routes = [
     {
@@ -19,6 +21,16 @@ const routes = [
       key: "pharmaceuticalregister",
       route: "/pharmaceuticalregister",
       component: <PharmaceuticalRegister />,
+    },
+    {
+      key: "pharmaceuticalupdate",
+      route: "/pharmaceuticalupdate/:id",
+      component: <PharmaceuticalUpdate />,
+    },
+    {
+      key: "pharmaceuticallisting",
+      route: "/pharmaceuticallisting",
+      component: <PharmaceuticalListing />,
     },
   ];
   
