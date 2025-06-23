@@ -45,6 +45,7 @@ import MedicineStockRegister from "layouts/pharmacy/MedicineStockRegister";
 import PharmaceuticalRegister from "layouts/pharmacy/PharmaceuticalRegister";
 import PharmaceuticalUpdate from "layouts/pharmacy/PharmaceuticalUpdate";
 import PharmaceuticalListing from "layouts/pharmacy/PharmaceuticalListing";
+import MedicineListing from "layouts/pharmacy/MedicineListing";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -93,6 +94,14 @@ const routes = [
     icon: <Icon fontSize="small">list</Icon>,
     route: "/pharmaceuticallisting",
     component: <PharmaceuticalListing />,
+  },
+  {
+    type: "collapse",
+    name: "Listar Medicamentos",
+    key: "medicinelisting",
+    icon: <Icon fontSize="small">list</Icon>,
+    route: "/medicinelisting",
+    component: <MedicineListing />,
   },
   {
     key: "pharmaceuticalupdate",
