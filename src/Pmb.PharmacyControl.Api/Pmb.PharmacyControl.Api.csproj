@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Pmb.PharmacyControl.Data\Pmb.PharmacyControl.Data.csproj" />
     <ProjectReference Include="..\Pmb.PharmacyControl.Domain\Pmb.PharmacyControl.Domain.csproj" />
+    <ProjectReference Include="..\Pmb.PharmacyControl.Infra\Pmb.PharmacyControl.Infra.csproj" />
   </ItemGroup>
 
 </Project>
