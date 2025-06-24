@@ -46,6 +46,7 @@ import PharmaceuticalRegister from "layouts/pharmacy/PharmaceuticalRegister";
 import PharmaceuticalUpdate from "layouts/pharmacy/PharmaceuticalUpdate";
 import PharmaceuticalListing from "layouts/pharmacy/PharmaceuticalListing";
 import MedicineListing from "layouts/pharmacy/MedicineListing";
+import MedicineControl from "layouts/pharmacy/MedicineControl";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -102,6 +103,14 @@ const routes = [
     icon: <Icon fontSize="small">list</Icon>,
     route: "/medicinelisting",
     component: <MedicineListing />,
+  },
+  {
+    type: "collapse",
+    name: "Controle de Medicamentos",
+    key: "medicinecontrol",
+    icon: <Icon fontSize="small">list</Icon>,
+    route: "/medicinecontrol",
+    component: <MedicineControl />,
   },
   {
     key: "pharmaceuticalupdate",
