@@ -20,7 +20,7 @@ using Pmb.PharmacyControl.Domain.Contracts.Infra;
 namespace Pmb.PharmacyControl.Api.Controllers.V1
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "PharmacyControl")]
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {

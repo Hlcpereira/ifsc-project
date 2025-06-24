@@ -30,6 +30,7 @@ using Pmb.PharmacyControl.Domain.Contracts.Persistance;
 using Pmb.PharmacyControl.Domain.Contracts.Repositories;
 using Pmb.PharmacyControl.Domain.Contracts.Infra;
 using Pmb.PharmacyControl.Infra.Services;
+using Pmb.PharmacyControl.CrossCutting.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +53,7 @@ services.AddScoped<IPharmaceuticalService, PharmaceuticalService>();
 services.AddScoped<IPharmaceuticalRepository, PharmaceuticalRepository>();
 services.AddScoped<IJwTokenService, JwTokenService>();
 services.AddScoped<IUnitOfWork, UnitOfWork>();
+services.AddScoped<JwTokenConfig>();
 
 services.AddCors(options =>
 {
