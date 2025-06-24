@@ -20,13 +20,13 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
 function MedicineListing() {
-    const [medicines, setMecidines] = useState([]);
+    const [medicines, setMedicines] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchMecidines = async () => {
+        const fetchMedicines = async () => {
             try {
-                const medicineApiUrl = process.env.REACT_APP_API_URL + "Mecidine";
+                const medicineApiUrl = process.env.REACT_APP_API_URL + "Medicine";
                 const response = await fetch(medicineApiUrl, {
                     method: 'GET',
                     headers: {
@@ -36,7 +36,7 @@ function MedicineListing() {
                 
                 if (response.ok) {
                     const data = await response.json();
-                    setMecidines(data);
+                    setMedicines(data);
                 }
             } catch (error) {
                 console.error('Error fetching medicines:', error);
@@ -45,15 +45,12 @@ function MedicineListing() {
             }
         };
 
-        fetchMecidines();
+        fetchMedicines();
     }, []);
 
     // Configuração das colunas da tabela
     const columns = [
         { Header: "nome", accessor: "name", align: "left" },
-        { Header: "crf", accessor: "registerNumber", align: "center" },
-        { Header: "unidade de saúde", accessor: "healthUnit", align: "left" },
-        { Header: "ações", accessor: "action", align: "center" },
     ];
 
     // Configuração das linhas da tabela
