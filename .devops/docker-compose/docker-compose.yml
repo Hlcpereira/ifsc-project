@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: pharmacy_postgres
+    environment:
+      POSTGRES_DB: pharmacy_control
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d  # Optional: for initialization scripts
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - pharmacy_network
+
+  # .NET Core API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pharmacy_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5236;https://+:7250
+      # Connection string using the postgres service name
+      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=pharmacy_control;Pooling=false;Persist Security Info=true;Include Error Detail=true
+    ports:
+      - "5236:5236"  # HTTP
+      - "7250:7250"  # HTTPS
+    networks:
+      - pharmacy_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  pharmacy_network:
+    driver: bridge
