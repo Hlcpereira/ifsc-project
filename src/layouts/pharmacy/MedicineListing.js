@@ -24,33 +24,110 @@ function MedicineListing() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchMedicines = async () => {
+        const fetchData = async () => {
             try {
-                const medicineApiUrl = process.env.REACT_APP_API_URL + "Medicine";
-                const response = await fetch(medicineApiUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
+                const baseUrl = process.env.REACT_APP_API_URL;
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    setMedicines(data);
+                // Fetch both Medicine and MedicineStock data
+                const [medicineResponse, medicineStockResponse] = await Promise.all([
+                    fetch(`${baseUrl}Medicine`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }),
+                    fetch(`${baseUrl}MedicineStock`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                ]);
+
+                let medicineData = [];
+                let medicineStockData = [];
+
+                if (medicineResponse.ok) {
+                    medicineData = await medicineResponse.json();
                 }
+
+                if (medicineStockResponse.ok) {
+                    medicineStockData = await medicineStockResponse.json();
+                }
+
+                // Process and merge the data
+                const processedMedicines = processMedicineData(medicineData, medicineStockData);
+                setMedicines(processedMedicines);
+
             } catch (error) {
-                console.error('Error fetching medicines:', error);
+                console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchMedicines();
+        fetchData();
     }, []);
+
+    // Function to convert control level to Portuguese
+    const convertControlLevel = (controlLevel) => {
+        const controlLevelMap = {
+            'RedStripe': 'Vermelho',
+            'YellowStripe': 'Amarelo',
+            'BlackStripe': 'Preto',
+            'BlueStripe': 'Azul',
+            'NoControl': 'Sem Controle',
+            'Controlled': 'Controlado',
+            'Psychotropic': 'Psicotrópico',
+            'Narcotic': 'Narcótico'
+        };
+        
+        return controlLevelMap[controlLevel] || controlLevel;
+    };
+
+    // Function to process and merge medicine data with stock data
+    const processMedicineData = (medicineData, medicineStockData) => {
+        // Group stock data by medicineId
+        const stockByMedicineId = {};
+        
+        medicineStockData.forEach(stock => {
+            const medicineId = stock.medicineId;
+            
+            if (!stockByMedicineId[medicineId]) {
+                stockByMedicineId[medicineId] = {
+                    totalQuantity: 0,
+                    healthUnits: []
+                };
+            }
+            
+            stockByMedicineId[medicineId].totalQuantity += stock.quantity;
+            stockByMedicineId[medicineId].healthUnits.push(stock.healthUnit.name);
+        });
+
+        // Process each medicine and match with stock data
+        const processedMedicines = medicineData.map(medicine => {
+            const stockInfo = stockByMedicineId[medicine.id];
+            
+            return {
+                medicineId: medicine.id,
+                medicine: {
+                    name: medicine.name,
+                    controlLevel: medicine.controlLevel
+                },
+                totalQuantity: stockInfo ? stockInfo.totalQuantity : 0,
+                healthUnits: stockInfo ? stockInfo.healthUnits : ['Nenhuma unidade possui o medicamento']
+            };
+        });
+
+        return processedMedicines;
+    };
 
     // Configuração das colunas da tabela
     const columns = [
-        { Header: "nome", accessor: "name", align: "left" },
+        { Header: "Nome", accessor: "name", align: "left" },
+        { Header: "Nível de Controle", accessor: "controlLevel", align: "left" },
+        { Header: "Quantidade Total", accessor: "totalQuantity", align: "center" },
+        { Header: "Unidades de Saúde", accessor: "healthUnits", align: "left" },
     ];
 
     // Configuração das linhas da tabela
@@ -59,15 +136,37 @@ function MedicineListing() {
             <MDBox display="flex" alignItems="center" lineHeight={1}>
                 <MDBox ml={2} lineHeight={1}>
                     <MDTypography display="block" variant="button" fontWeight="medium">
-                        {medicine.name}
+                        {medicine.medicine.name}
                     </MDTypography>
                 </MDBox>
             </MDBox>
         ),
         controlLevel: (
             <MDTypography variant="caption" color="text" fontWeight="medium">
-                {medicine.controlLevel}
+                {convertControlLevel(medicine.medicine.controlLevel)}
             </MDTypography>
+        ),
+        totalQuantity: (
+            <MDBox textAlign="center">
+                <MDTypography variant="caption" color="text" fontWeight="medium">
+                    {medicine.totalQuantity}
+                </MDTypography>
+            </MDBox>
+        ),
+        healthUnits: (
+            <MDBox>
+                {medicine.healthUnits.map((unit, index) => (
+                    <MDTypography 
+                        key={index} 
+                        variant="caption" 
+                        color="text" 
+                        fontWeight="medium"
+                        display="block"
+                    >
+                        • {unit}
+                    </MDTypography>
+                ))}
+            </MDBox>
         ),
     }));
 
@@ -92,7 +191,7 @@ function MedicineListing() {
                                 alignItems="center"
                             >
                                 <MDTypography variant="h6" color="white">
-                                    Lista de medicamentos
+                                    Estoque de Medicamentos
                                 </MDTypography>
                             </MDBox>
                             
@@ -115,7 +214,7 @@ function MedicineListing() {
                                             Nenhum medicamento encontrado
                                         </MDTypography>
                                         <MDTypography variant="body2" color="text">
-                                            Comece cadastrando o primeiro farmacêutico
+                                            Comece cadastrando o primeiro medicamento
                                         </MDTypography>
                                         <MDBox mt={2}>
                                             <MDButton
