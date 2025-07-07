@@ -26,12 +26,15 @@ function MedicineControl() {
     const [formData, setFormData] = useState({
         medicineId: "",
         pharmaceuticalId: "",
+        healthUnitId: "",
         quantity: 0,
         prescriptionUrl: ""
     });
 
     const [medicines, setMedicines] = useState([]);
     const [pharmaceuticals, setPharmaceuticals] = useState([]);
+    const [medicineStock, setMedicineStock] = useState([]);
+    const [filteredHealthUnits, setFilteredHealthUnits] = useState([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [alert, setAlert] = useState({ show: false, message: "", severity: "success" });
@@ -80,13 +83,68 @@ function MedicineControl() {
             } catch (error) {
                 console.error('Error fetching pharmaceuticals:', error);
                 showAlert("Erro ao carregar farmacêuticos", "error");
-            } finally {
-                setLoading(false);
             }
         };
 
         fetchPharmaceuticals();
     }, []);
+
+    // Buscar estoque de medicamentos
+    useEffect(() => {
+        const fetchMedicineStock = async () => {
+            try {
+                const medicineStockApiUrl = process.env.REACT_APP_API_URL + "MedicineStock";
+                const response = await fetch(medicineStockApiUrl, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    setMedicineStock(data);
+                } else {
+                    showAlert("Erro ao carregar estoque de medicamentos", "error");
+                }
+            } catch (error) {
+                console.error('Error fetching medicine stock:', error);
+                showAlert("Erro ao carregar estoque de medicamentos", "error");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchMedicineStock();
+    }, []);
+
+    // Filtrar unidades de saúde baseado no medicamento selecionado
+    useEffect(() => {
+        if (formData.medicineId && medicineStock.length > 0) {
+            const stockForMedicine = medicineStock.filter(
+                stock => stock.medicine && stock.medicine.id === formData.medicineId
+            );
+            
+            const uniqueHealthUnits = stockForMedicine.reduce((acc, item) => {
+                if (item.healthUnit && !acc.find(unit => unit.id === item.healthUnit.id)) {
+                    acc.push(item.healthUnit);
+                }
+                return acc;
+            }, []);
+            
+            setFilteredHealthUnits(uniqueHealthUnits);
+        } else {
+            setFilteredHealthUnits([]);
+        }
+        
+        // Limpar healthUnitId se não estiver mais nas opções disponíveis
+        if (formData.healthUnitId && filteredHealthUnits.length > 0) {
+            const isHealthUnitStillAvailable = filteredHealthUnits.some(
+                unit => unit.id === formData.healthUnitId
+            );
+            if (!isHealthUnitStillAvailable) {
+                setFormData(prev => ({ ...prev, healthUnitId: "" }));
+            }
+        }
+    }, [formData.medicineId, medicineStock]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -103,6 +161,15 @@ function MedicineControl() {
                 [name]: value 
             });
         }
+
+        // Limpar healthUnitId quando medicineId mudar
+        if (name === "medicineId") {
+            setFormData(prev => ({ 
+                ...prev, 
+                [name]: value,
+                healthUnitId: ""
+            }));
+        }
     };
 
     const showAlert = (message, severity = "success") => {
@@ -117,7 +184,7 @@ function MedicineControl() {
         setSubmitting(true);
 
         // Validação básica
-        if (!formData.medicineId || !formData.pharmaceuticalId || formData.quantity <= 0) {
+        if (!formData.medicineId || !formData.pharmaceuticalId || !formData.healthUnitId || formData.quantity <= 0) {
             showAlert("Por favor, preencha todos os campos obrigatórios", "error");
             setSubmitting(false);
             return;
@@ -154,6 +221,7 @@ function MedicineControl() {
         setFormData({
             medicineId: "",
             pharmaceuticalId: "",
+            healthUnitId: "",
             quantity: 0,
             prescriptionUrl: ""
         });
@@ -244,6 +312,36 @@ function MedicineControl() {
                                             {pharmaceuticals.map((pharmaceutical) => (
                                                 <MenuItem key={pharmaceutical.id} value={pharmaceutical.id}>
                                                     {pharmaceutical.name} - CRF: {pharmaceutical.registerNumber}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </MDBox>
+
+                                    <MDBox mb={2}>
+                                        <TextField
+                                            fullWidth
+                                            select
+                                            label="Unidade de Saúde *"
+                                            name="healthUnitId"
+                                            value={formData.healthUnitId}
+                                            onChange={handleInputChange}
+                                            required
+                                            variant="outlined"
+                                            disabled={!formData.medicineId}
+                                            helperText={
+                                                !formData.medicineId 
+                                                    ? "Selecione primeiro um medicamento"
+                                                    : filteredHealthUnits.length === 0
+                                                    ? "Nenhuma unidade de saúde disponível para este medicamento"
+                                                    : "Selecione uma unidade de saúde"
+                                            }
+                                        >
+                                            <MenuItem value="">
+                                                <em>Selecione uma unidade de saúde</em>
+                                            </MenuItem>
+                                            {filteredHealthUnits.map((healthUnit) => (
+                                                <MenuItem key={healthUnit.id} value={healthUnit.id}>
+                                                    {healthUnit.name}
                                                 </MenuItem>
                                             ))}
                                         </TextField>
