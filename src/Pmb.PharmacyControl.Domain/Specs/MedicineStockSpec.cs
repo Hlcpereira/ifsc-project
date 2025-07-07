@@ -22,6 +22,15 @@ namespace Pmb.PharmacyControl.Domain.Specs
             if (!string.IsNullOrEmpty(filter.Name))
                 ByMedicineName(filter.Name);
 
+            if (filter.HealthUnitId != Guid.Empty)
+                ByHealthUnitId(filter.HealthUnitId);
+
+            return this;
+        }
+        public MedicineStockSpec ByHealthUnitId(Guid HealthUnitId)
+        {
+            AddPredicate(x => x.HealthUnitId == HealthUnitId);
+
             return this;
         }
         public MedicineStockSpec ByMedicineName(string name)

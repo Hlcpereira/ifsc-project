@@ -12,6 +12,7 @@ namespace Pmb.PharmacyControl.Domain.AppServices.MedicineControl.Commands
     {
         public Guid MedicineId { get; set; }
         public Guid PharmaceuticalId { get; set; }
+        public Guid HealthUnitId { get; set; }
         public int Quantity { get; set; }
         public string PrescriptionUrl { get; set; }
     }

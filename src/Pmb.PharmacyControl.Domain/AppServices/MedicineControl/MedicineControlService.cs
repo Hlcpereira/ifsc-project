@@ -13,6 +13,7 @@ using MedicineControlEntity = Pmb.PharmacyControl.Domain.Entities.MedicineContro
 using Pmb.PharmacyControl.Domain.Extensions;
 using Pmb.PharmacyControl.Domain.AppServices.MedicineControl.Commands;
 using Pmb.PharmacyControl.Domain.AppServices.MedicineControl.Contracts;
+using Pmb.PharmacyControl.Domain.AppServices.MedicineStock.Commands;
 using Pmb.PharmacyControl.Domain.Contracts.Persistance;
 using Pmb.PharmacyControl.Domain.Contracts.Repositories;
 using Pmb.PharmacyControl.Domain.Projections;
@@ -25,17 +26,38 @@ namespace Pmb.PharmacyControl.Domain.AppServices.MedicineControl
     {
 
         protected IMedicineControlRepository _repository;
+        protected IMedicineStockRepository _medicineStockRepository;
 
-        public MedicineControlService (
+        public MedicineControlService(
             IUnitOfWork uow,
-            IMedicineControlRepository repository
+            IMedicineControlRepository repository,
+            IMedicineStockRepository medicineStockRepository
         ) : base(uow)
         {
             _repository = repository;
+            _medicineStockRepository = medicineStockRepository;
         }
 
         public async Task<MedicineControlVm> ControlMedicine(ControlMedicineCommand command)
         {
+            var filter = new Filters.MedicineStockFilter()
+            {
+                HealthUnitId = command.HealthUnitId
+            };
+
+            var medicineStockFilterSpec = new MedicineStockSpec()
+                .ByFilter(filter)
+                .Include(x => x
+                    .Include(x => x.Medicine)
+                    .Include(x => x.HealthUnit)
+                );
+
+            var medicineStock = await _medicineStockRepository.FindAsNoTrackingAsync(medicineStockFilterSpec);
+
+            medicineStock.Quantity -= command.Quantity;
+
+            _medicineStockRepository.Modify(medicineStock);
+
             var medicineControl = new MedicineControlEntity()
             {
                 Id = Guid.NewGuid(),
