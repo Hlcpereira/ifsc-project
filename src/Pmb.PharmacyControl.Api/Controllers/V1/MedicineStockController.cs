@@ -50,7 +50,7 @@ namespace Pmb.PharmacyControl.Api.Controllers.V1
                     .Include(x => x.HealthUnit)
                 );
 
-            var medicineStock = await repository.FindAsNoTrackingAsync(filterSpec);
+            var medicineStock = repository.ListAsNoTracking(filterSpec);
             //return Ok(medicineStock.ToVm());
             return Ok(medicineStock);
         }
